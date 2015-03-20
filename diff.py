@@ -48,61 +48,61 @@ def make_colormap(seq):
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
 
 def create_error_image(file_groundtruth, file_image, file_mask, file_out, multiplier):
-	# define custom colormap
-	c = mcolors.ColorConverter().to_rgb
-	rvb = make_colormap([ c('yellow'), c('red'), 0.25, c('red'), c('black'), 0.5, c('black'), c('blue'), 0.75, c('blue'), c('white') ])
+    # define custom colormap
+    c = mcolors.ColorConverter().to_rgb
+    rvb = make_colormap([ c('yellow'), c('red'), 0.25, c('red'), c('black'), 0.5, c('black'), c('blue'), 0.75, c('blue'), c('white') ])
 
-	# load images
-	groundtruth = mpimg.imread(file_groundtruth)
-	image = mpimg.imread(file_image)
+    # load images
+    groundtruth = mpimg.imread(file_groundtruth)
+    image = mpimg.imread(file_image)
 
-	if file_mask != None:
-	    img_mask = mpimg.imread(file_mask)[:,:,0]
+    if file_mask != None:
+        img_mask = mpimg.imread(file_mask)[:,:,0]
 
-	# convert to luminance images
-	lum1 = groundtruth[:,:,0]*0.2126 	+ groundtruth[:,:,1]*0.7152 	+ groundtruth[:,:,2]*0.0722
-	lum2 = image[:,:,0]*0.2126 			+ image[:,:,1]*0.7152 			+ image[:,:,2]*0.0722
+    # convert to luminance images
+    lum1 = groundtruth[:,:,0]*0.2126     + groundtruth[:,:,1]*0.7152     + groundtruth[:,:,2]*0.0722
+    lum2 = image[:,:,0]*0.2126           + image[:,:,1]*0.7152           + image[:,:,2]*0.0722
 
-	# error per component [-1, 1]
-	difference = np.subtract(lum2, lum1)
+    # error per component [-1, 1]
+    difference = np.subtract(lum2, lum1)
 
-	# error squared
-	abs_error_squared = np.square(np.fabs(difference)+1.0)-1.0
+    # error squared
+    abs_error_squared = np.square(np.fabs(difference)+1.0)-1.0
 
-	# back to [-1, 1] range
-	abs_error_squared = np.multiply(abs_error_squared, np.sign(difference))
+    # back to [-1, 1] range
+    abs_error_squared = np.multiply(abs_error_squared, np.sign(difference))
 
-	# upper and lower clip bound
-	error = abs_error_squared * multiplier
+    # upper and lower clip bound
+    error = abs_error_squared * multiplier
 
-	if file_mask != None:
-	    error = np.multiply(error, img_mask)
+    if file_mask != None:
+        error = np.multiply(error, img_mask)
 
-	# find maximum value
-	max_scale = np.max(np.fabs(error))
-	max_scale = 1
+    # find maximum value
+    max_scale = np.max(np.fabs(error))
+    max_scale = 1
 
-	# render the plot
-	imgplot = plt.imshow(error)
+    # render the plot
+    imgplot = plt.imshow(error)
 
-	# choose a color palette
-	imgplot.set_cmap(rvb)
-	imgplot.set_clim(-max_scale, max_scale)
+    # choose a color palette
+    imgplot.set_cmap(rvb)
+    imgplot.set_clim(-max_scale, max_scale)
 
-	# make layout tighter
-	plt.axis('off')
-	from mpl_toolkits.axes_grid1 import make_axes_locatable
-	divider = make_axes_locatable(plt.gca())
-	cax = divider.append_axes("right", "5%", pad="1%")
-	plt.colorbar(imgplot, cax=cax)
-	plt.tight_layout()
+    # make layout tighter
+    plt.axis('off')
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+    divider = make_axes_locatable(plt.gca())
+    cax = divider.append_axes("right", "5%", pad="1%")
+    plt.colorbar(imgplot, cax=cax)
+    plt.tight_layout()
 
-	F = pylab.gcf()
-	the_dpi = 192
-	width  = len(image[0])/the_dpi + 8
-	height = len(image)/the_dpi + 5
-	#F.set_size_inches(width, height)
-	F.savefig(file_out, dpi=the_dpi, bbox_inches='tight', pad_inches=0)
+    F = pylab.gcf()
+    the_dpi = 192
+    width  = len(image[0])/the_dpi + 8
+    height = len(image)/the_dpi + 5
+    #F.set_size_inches(width, height)
+    F.savefig(file_out, dpi=the_dpi, bbox_inches='tight', pad_inches=0)
 
 
 parser = optparse.OptionParser()
@@ -115,11 +115,11 @@ parser.add_option("-x", "--multiplier", type="int", dest="multiplier", help="Mul
 
 if options.file_groundtruth and options.file_image:
 
-	if len(args) == 0:
-		options.file_output = options.file_image[:-4] + "_diff.png"
-	else:
-		options.file_output = args[0]
+    if len(args) == 0:
+        options.file_output = options.file_image[:-4] + "_diff.png"
+    else:
+        options.file_output = args[0]
 
-	create_error_image(options.file_groundtruth, options.file_image, options.file_mask, options.file_output, options.multiplier)
+    create_error_image(options.file_groundtruth, options.file_image, options.file_mask, options.file_output, options.multiplier)
 else:
-	parser.print_help()
+    parser.print_help()
