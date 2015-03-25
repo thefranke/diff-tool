@@ -46,6 +46,12 @@ def make_colormap(seq):
             cdict['green'].append([item, g1, g2])
             cdict['blue'].append([item, b1, b2])
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
+    
+def to_luminance(arr):
+    wR = 0.2126
+    wG = 0.7152
+    wB = 0.0722
+    return arr[:,:,0]*wR + arr[:,:,1]*wG + arr[:,:,2]*wB
 
 def create_error_image(file_groundtruth, file_image, file_mask, file_out, multiplier):
     # define custom colormap
@@ -58,16 +64,21 @@ def create_error_image(file_groundtruth, file_image, file_mask, file_out, multip
 
     if file_mask != None:
         img_mask = mpimg.imread(file_mask)[:,:,0]
-
+        
     # convert to luminance images
-    lum1 = groundtruth[:,:,0]*0.2126     + groundtruth[:,:,1]*0.7152     + groundtruth[:,:,2]*0.0722
-    lum2 = image[:,:,0]*0.2126           + image[:,:,1]*0.7152           + image[:,:,2]*0.0722
-
+    lum1 = to_luminance(groundtruth)
+    lum2 = to_luminance(image)
+    
     # error per component [-1, 1]
     difference = np.subtract(lum2, lum1)
-
+    
     # error squared
     abs_error_squared = np.square(np.fabs(difference)+1.0)-1.0
+    
+    # compute mse
+    mse = ((image-groundtruth)**2).mean()
+    msef = (((image-groundtruth)*256)**2).mean()
+    print "MSE: " + str(msef) + " (" + str(mse) + ")"
 
     # back to [-1, 1] range
     abs_error_squared = np.multiply(abs_error_squared, np.sign(difference))
@@ -109,7 +120,7 @@ parser = optparse.OptionParser()
 parser.add_option("-g", "--groundtruth", dest="file_groundtruth", help="The image of the ground truth.")
 parser.add_option("-i", "--image", dest="file_image", help="The image of the new method.")
 parser.add_option("-m", "--mask", dest="file_mask", help="An optional binary mask.", default=None)
-parser.add_option("-x", "--multiplier", type="int", dest="multiplier", help="Multiply difference by this amount", default=8)
+parser.add_option("-x", "--multiplier", type="float", dest="multiplier", help="Multiply difference by this amount", default=8)
 
 (options, args) = parser.parse_args()
 
