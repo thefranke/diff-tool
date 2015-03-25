@@ -53,7 +53,7 @@ def to_luminance(arr):
     wB = 0.0722
     return arr[:,:,0]*wR + arr[:,:,1]*wG + arr[:,:,2]*wB
 
-def create_error_image(file_groundtruth, file_image, file_mask, file_out, multiplier):
+def create_error_image(file_groundtruth, file_image, file_mask, file_out, multiplier, output_mse):
     # define custom colormap
     c = mcolors.ColorConverter().to_rgb
     rvb = make_colormap([ c('yellow'), c('red'), 0.25, c('red'), c('black'), 0.5, c('black'), c('blue'), 0.75, c('blue'), c('white') ])
@@ -75,10 +75,11 @@ def create_error_image(file_groundtruth, file_image, file_mask, file_out, multip
     # error squared
     abs_error_squared = np.square(np.fabs(difference)+1.0)-1.0
     
-    # compute mse
-    mse = ((image-groundtruth)**2).mean()
-    msef = (((image-groundtruth)*256)**2).mean()
-    print "MSE: " + str(msef) + " (" + str(mse) + ")"
+    # compute and print mse
+    if output_mse:
+        mse  = ((image-groundtruth)**2).mean()
+        msef = (((image-groundtruth)*256)**2).mean()
+        print "MSE: " + str(msef) + " (" + str(mse) + ")"
 
     # back to [-1, 1] range
     abs_error_squared = np.multiply(abs_error_squared, np.sign(difference))
@@ -121,6 +122,7 @@ parser.add_option("-g", "--groundtruth", dest="file_groundtruth", help="The imag
 parser.add_option("-i", "--image", dest="file_image", help="The image of the new method.")
 parser.add_option("-m", "--mask", dest="file_mask", help="An optional binary mask.", default=None)
 parser.add_option("-x", "--multiplier", type="float", dest="multiplier", help="Multiply difference by this amount", default=1)
+parser.add_option("-o", "--output-mse", action="store_true", dest="output_mse", help="Prints and the mean squared error", default=False)
 
 (options, args) = parser.parse_args()
 
@@ -131,6 +133,7 @@ if options.file_groundtruth and options.file_image:
     else:
         options.file_output = args[0]
 
-    create_error_image(options.file_groundtruth, options.file_image, options.file_mask, options.file_output, options.multiplier)
+    create_error_image(options.file_groundtruth, options.file_image, options.file_mask, options.file_output, options.multiplier, options.output_mse)
+
 else:
     parser.print_help()
