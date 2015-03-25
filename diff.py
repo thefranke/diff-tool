@@ -120,7 +120,7 @@ parser = optparse.OptionParser()
 parser.add_option("-g", "--groundtruth", dest="file_groundtruth", help="The image of the ground truth.")
 parser.add_option("-i", "--image", dest="file_image", help="The image of the new method.")
 parser.add_option("-m", "--mask", dest="file_mask", help="An optional binary mask.", default=None)
-parser.add_option("-x", "--multiplier", type="float", dest="multiplier", help="Multiply difference by this amount", default=8)
+parser.add_option("-x", "--multiplier", type="float", dest="multiplier", help="Multiply difference by this amount", default=1)
 
 (options, args) = parser.parse_args()
 
