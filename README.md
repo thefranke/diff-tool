@@ -12,7 +12,7 @@ In this case the generated output is called "render_diff.png". It will show the 
 
     Usage: diff.py [options]
     
-   Options:
+    Options:
       -h, --help            show this help message and exit
       -g FILE_GROUNDTRUTH, --groundtruth=FILE_GROUNDTRUTH
                             The image of the ground truth.
@@ -24,7 +24,6 @@ In this case the generated output is called "render_diff.png". It will show the 
                             Multiply difference by this amount
       -o, --output-mse      Prints and the mean squared error
 
-                            
 # Troubleshooting
 
 If you are running the script on Windows you can look here for additional libraries:
