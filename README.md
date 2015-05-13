@@ -12,7 +12,7 @@ In this case the generated output is called "render_diff.png". It will show the 
 
     Usage: diff.py [options]
     
-    Options:
+   Options:
       -h, --help            show this help message and exit
       -g FILE_GROUNDTRUTH, --groundtruth=FILE_GROUNDTRUTH
                             The image of the ground truth.
@@ -22,6 +22,8 @@ In this case the generated output is called "render_diff.png". It will show the 
                             An optional binary mask.
       -x MULTIPLIER, --multiplier=MULTIPLIER
                             Multiply difference by this amount
+      -o, --output-mse      Prints and the mean squared error
+
                             
 # Troubleshooting
 
