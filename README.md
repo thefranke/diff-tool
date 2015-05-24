@@ -22,7 +22,8 @@ In this case the generated output is called "render_diff.png". It will show the 
                             An optional binary mask.
       -x MULTIPLIER, --multiplier=MULTIPLIER
                             Multiply difference by this amount
-                            
+      -o, --output-mse      Prints  mean square error
+
 # Troubleshooting
 
 If you are running the script on Windows you can look here for additional libraries:

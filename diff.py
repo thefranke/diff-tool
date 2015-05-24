@@ -122,7 +122,7 @@ parser.add_option("-g", "--groundtruth", dest="file_groundtruth", help="The imag
 parser.add_option("-i", "--image", dest="file_image", help="The image of the new method.")
 parser.add_option("-m", "--mask", dest="file_mask", help="An optional binary mask.", default=None)
 parser.add_option("-x", "--multiplier", type="float", dest="multiplier", help="Multiply difference by this amount", default=1)
-parser.add_option("-o", "--output-mse", action="store_true", dest="output_mse", help="Prints and the mean squared error", default=False)
+parser.add_option("-o", "--output-mse", action="store_true", dest="output_mse", help="Prints mean square error", default=False)
 
 (options, args) = parser.parse_args()
 
