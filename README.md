@@ -1,6 +1,8 @@
 # diff-tool
 
-This tool is used to visualize the difference of two input images. To do this, the squared differnce of the luminance of each pixel is amplified by a user-supplied factor (the default is 1). The output shows positive and negative differences as a heatmap.
+This tool is used to visualize the difference of two input images. To do this, the squared difference of the luminance of each pixel is amplified by a user-supplied factor (the default is 1). The output shows positive and negative differences as a heatmap.
+
+![Sample output](http://www.tobias-franke.eu/projects/diff_tool/s_mcguire_diff_f.jpg "Sample output")
 
 # Usage
 
@@ -11,7 +13,7 @@ This is a sample input
 In this case the generated output is called "render_diff.png". It will show the squared difference times four.
 
     Usage: diff.py [options]
-    
+
     Options:
       -h, --help            show this help message and exit
       -g FILE_GROUNDTRUTH, --groundtruth=FILE_GROUNDTRUTH

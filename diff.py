@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 
 # Diff-tool
+#
 # Copyright (c) 2013 Tobias Alexander Franke
 # http://www.tobias-franke.eu
-
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,6 +22,9 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
+import matplotlib
+matplotlib.use('Agg')
 
 import pylab
 import matplotlib.pyplot as plt
@@ -46,7 +50,7 @@ def make_colormap(seq):
             cdict['green'].append([item, g1, g2])
             cdict['blue'].append([item, b1, b2])
     return mcolors.LinearSegmentedColormap('CustomMap', cdict)
-    
+
 def to_luminance(arr):
     wR = 0.2126
     wG = 0.7152
@@ -64,22 +68,22 @@ def create_error_image(file_groundtruth, file_image, file_mask, file_out, multip
 
     if file_mask != None:
         img_mask = mpimg.imread(file_mask)[:,:,0]
-        
+
     # convert to luminance images
     lum1 = to_luminance(groundtruth)
     lum2 = to_luminance(image)
-    
+
     # error per component [-1, 1]
     difference = np.subtract(lum2, lum1)
-    
+
     # error squared
     abs_error_squared = np.square(np.fabs(difference)+1.0)-1.0
-    
+
     # compute and print mse
     if output_mse:
         mse  = ((image-groundtruth)**2).mean()
         msef = (((image-groundtruth)*256)**2).mean()
-        print "MSE: " + str(msef) + " (" + str(mse) + ")"
+        print("MSE: " + str(msef) + " (" + str(mse) + ")")
 
     # back to [-1, 1] range
     abs_error_squared = np.multiply(abs_error_squared, np.sign(difference))
